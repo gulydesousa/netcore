@@ -1,0 +1,2 @@
+# netcore
+Proyectos de NetCore
