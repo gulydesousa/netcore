@@ -1,0 +1,31 @@
+﻿@{
+    var columnWidths = new Dictionary<string, string>();
+    columnWidths.Add(nameof(Entities.Person.PersonName), "15%");
+    columnWidths.Add(nameof(Entities.Person.Address), "15%");
+    columnWidths.Add(nameof(Entities.Person.Country), "10%");
+    columnWidths.Add(nameof(Entities.Person.DateOfBirth), "10%");
+    columnWidths.Add(nameof(Entities.Person.Email), "12%");
+    columnWidths.Add(nameof(Entities.Person.Gender), "8%");
+    columnWidths.Add(nameof(Entities.Person.ReceiveNewsLetter), "5%");
+}
+
+@foreach (var field in ViewBag.SearchFields)
+{
+    string width = columnWidths.ContainsKey(field.Key) ? columnWidths[field.Key] : "";
+
+    //if data type is DateTime, then format it to dd-MM-yyyy
+    if (ViewBag.person.GetType().GetProperty(field.Key).PropertyType == typeof(DateTime?))
+    {
+        <td width="@width">@(ViewBag.person.GetType().GetProperty(field.Key).GetValue(ViewBag.person, null)?.ToString("dd-MM-yyyy"))</td>
+    }
+    //if data type is bool, then show Yes/No
+    else if (ViewBag.person.GetType().GetProperty(field.Key).PropertyType == typeof(bool))
+    {
+        <td width="@width">@(ViewBag.person.GetType().GetProperty(field.Key).GetValue(ViewBag.person, null) ? "Yes" : "No")</td>
+    }
+    else
+    {
+        <td width="@width">@(ViewBag.person.GetType().GetProperty(field.Key).GetValue(ViewBag.person, null))</td>
+    }
+}
+

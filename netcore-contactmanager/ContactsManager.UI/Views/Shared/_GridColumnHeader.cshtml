@@ -1,0 +1,22 @@
+﻿@{
+    var sortOrder = SortOrderOptions.ASC;
+}
+
+@if (ViewBag.CurrentSortBy == ViewBag.field.Key)
+{
+    sortOrder = ViewBag.CurrentSortOrder == SortOrderOptions.ASC ? SortOrderOptions.DESC : SortOrderOptions.ASC;
+}
+else
+{
+    sortOrder = ViewBag.CurrentSortBy == "" ? SortOrderOptions.DESC : SortOrderOptions.ASC;
+}
+@{
+    var iconDirection = sortOrder == SortOrderOptions.ASC ? "fa-sort-down" : "fa-sort-up";
+}
+<th>
+    <a href="~/persons/index?ddlSearchBy=@(ViewBag.CurrentSearchBy)&txtSearch=@(ViewBag.CurrentSearchText)&sortOrder=@(sortOrder)&sortBy=@(ViewBag.field.Key)">@(ViewBag.field.Value)</a>
+    @if (ViewBag.CurrentSortBy == ViewBag.field.Key)
+    {
+        <i class="fa-solid @iconDirection"></i>
+    }   
+</th>

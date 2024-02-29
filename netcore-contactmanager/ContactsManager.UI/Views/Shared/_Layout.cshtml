@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/StyleSheet.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    @*Contenedor para toda la pagina*@
+    <div class="container">
+        <div class="page-content">
+            <div class="margin-bottom">
+                <div class="flex" id="top-bar-div">
+                    <div class="flex-1" id="app-title-div">
+                        <h1 class="app-title">
+                            <i class="fa-solid fa-people-simple">
+                                Contact Manager
+                            </i>
+                        </h1>
+                    </div>
+                    <div class="flex-1 pr" id="search-box-div">
+                        <div class="navbar account-links">
+                            <ul>
+                                @if (User.Identity?.IsAuthenticated ?? false)
+                                {
+                                    <li>
+                                        <i class="fa-solid fa-user"></i>
+                                        @User.Identity?.Name
+                                    </li>
+
+                                    <li>
+                                        <a asp-action="Logout" asp-controller="Account">Logout</a>
+                                    </li>
+
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li>
+                                            <a asp-action="Index" asp-controller="Home" asp-area="Admin">Admin Home</a>
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+
+                                    <li>
+                                        @if (ViewBag.CurrentUrl == "~/Account/Register")
+                                        {
+                                            <a asp-action="Register" asp-controller="Account" class="nav-active">Register</a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Register" asp-controller="Account">Register</a>
+                                        }
+                                    </li>
+                                    <li>
+                                        @if (ViewBag.CurrentUrl == "~/Account/Login")
+                                        {
+                                            <a asp-action="Login" asp-controller="Account" class="nav-active">Login</a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Login" asp-controller="Account">Login</a>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            @*Contenedor para la barra de navegacion*@
+            <div class="navbar mb">
+                @*Lista de enlaces*@
+                <ul>
+                    <li>
+                        @if (ViewBag.CurrentUrl == "~/Persons/Index")
+                        {
+                            <a asp-action="Index" asp-controller="Persons" class="nav-active">Persons</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Index" asp-controller="Persons">Persons</a>
+                        }
+
+                    </li>
+                    <li>
+                        @if (ViewBag.CurrentUrl == "~/Countries/UploadFromExcel")
+                        {
+                            <a asp-action="UploadFromExcel" asp-controller="Countries" class="nav-active">Upload Countries From Excel</a>
+                        }
+                        else
+                        {
+                            <a asp-action="UploadFromExcel" asp-controller="Countries">Upload Countries From Excel</a>
+                        }
+                    </li>
+                </ul>
+            </div>
+
+
+            @*Contenido de la pagina*@
+            <div class="body">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

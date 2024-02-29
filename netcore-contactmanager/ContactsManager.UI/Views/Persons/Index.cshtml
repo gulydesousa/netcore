@@ -1,0 +1,101 @@
+﻿@model IEnumerable<PersonResponse>
+@{
+    ViewBag.Title = "Persons";
+    ViewBag.CurrentUrl = "~/Persons/Index";
+}
+
+<form asp-controller="Persons" asp-action="Index" method="get">
+
+    @*Bread Crumbs*@
+    <div class="flex">
+        <div class="flex-1">
+            <span class="text-grey">Contacts</span>
+            <i class="text-grey fa-padding fa-solid fa-caret-right"></i>
+            <span class="text-grey">Persons</span>
+        </div>
+
+        <div class="flex-1 text-right">
+            <a asp-action="Create" asp-controller="Persons" class="ml button-link button-blue-back">Create Person</a>
+            <a asp-controller="Persons" asp-action="PersonsPDF" class="ml button-link button-blue-back">Download as PDF</a>
+            <a asp-controller="Persons" asp-action="PersonsCSV" class="ml button-link button-blue-back">Download as CSV</a>
+            <a asp-controller="Persons" asp-action="PersonsEXCEL" class="ml button-link button-blue-back">Download as EXCEL</a>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <div class="flex">
+            <div class="flex-1">
+                <h1>Persons</h1>
+            </div>
+            @*Search form*@
+            <div class="flex-3 text-right">
+                <label>Search by:</label>
+                <select class="search-dropdown" name="ddlSearchBy" style="width:200px">
+                    @*Options from ViewBag.SeachFields dictionary*@
+                    @foreach (var field in ViewBag.SearchFields)
+                    {
+                        @if (field.Key == ViewBag.CurrentSearchBy)
+                        {
+                            <option value="@field.Key" selected="selected">@field.Value</option>
+                        }
+                        else
+                        {
+                            <option value="@field.Key">@field.Value</option>
+                        }
+                    }
+                    @*Eg: ddlSearchBy=PersonName&txtSearch=John&btnSearch=Search*@
+                </select>
+
+                <input type="search" id="txtSearch" name="txtSearch"
+                       value="@ViewBag.CurrentSearchText"
+                       class="search-text" placeholder="txtSearch" style="width:200px" />
+
+                <button id="btnSearch" class="search-button">Search</button>
+                <a asp-controller="Persons" asp-action="Index" class="ml link-hover">Clear all</a>
+            </div>
+        </div>
+
+
+
+
+
+        <table class="table w-100 mt persons">
+            <thead>
+                @*Header row for all columns in PersonResponse*@
+                <tr>
+
+                    @foreach (var field in ViewBag.SearchFields)
+                    {
+                        ViewDataDictionary headerData = new ViewDataDictionary(ViewData)
+                    {{"field", field}};
+
+
+                        @await Html.PartialAsync("_GridColumnHeader", headerData)
+                        ;
+                    }
+                    <th>Options</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @*Data for each row*@
+                @foreach (PersonResponse person in Model)
+                {
+                    <tr>
+                        @{
+                            ViewDataDictionary rowData = new ViewDataDictionary(ViewData)
+                    {{"person", person}};
+
+                            @await Html.PartialAsync("_GridRowData", rowData)
+                            ;
+                        }
+                        <td style="flex-wrap: nowrap;">
+                            <a asp-action="Edit" asp-controller="Persons" asp-route-personID="@person.PersonID" class="button-link button-blue-back">Edit</a>
+                            <a asp-action="Delete" asp-controller="Persons" asp-route-personID="@person.PersonID" class="button-link button-red-back">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</form>
