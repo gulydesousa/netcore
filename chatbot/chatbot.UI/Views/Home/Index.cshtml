@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model string
+
+<h1>Chatbot</h1>
+
+<p>@Html.Raw(Model)</p>
+</p>
+
+<form method="post">
+    <input type="text" name="message" required style="width: 500px;" />
+    <select name="theme">
+        <option value="Python">Python</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="C#">C#</option>
+        <option value="Java">Java</option>
+        <!-- Agrega más opciones según sea necesario -->
+    </select>
+    <button type="submit">Send</button>
+</form>
