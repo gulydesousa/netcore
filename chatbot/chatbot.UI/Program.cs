@@ -1,5 +1,5 @@
 using chatbot.Core.Interfaces;
-using chatbot.Infrastructure.Services;
+using chatbot.Infrastructure;
 using chatbot.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);

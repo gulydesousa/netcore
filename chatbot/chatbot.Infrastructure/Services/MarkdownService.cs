@@ -2,7 +2,7 @@
 using Markdig;
 
 
-namespace chatbot.Infrastructure.Services
+namespace chatbot.Infrastructure
 {
     public class MarkdownService : IMarkdownService
     {
