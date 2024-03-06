@@ -1,12 +1,18 @@
-﻿<form method="post" onsubmit="return DisplayProgressMessage(this, 'Sending...');">
+﻿@{
+    var themes = ViewBag.Themes as List<string>;
+}
+
+<form method="post" onsubmit="return DisplayProgressMessage(this, 'Sending...');">
     <div style="display: flex; align-items: center;">
         <h1 style="margin-right: 10px;">Chatbot</h1>
         <select name="theme">
-            <option value="Python">Python</option>
-            <option value="JavaScript">JavaScript</option>
-            <option value="C#">C#</option>
-            <option value="Java">Java</option>
-            <!-- Add more options as needed -->
+            @if (themes != null)
+            {
+                @foreach (var theme in themes)
+                {
+                    <option value="@theme" selected="@((string)ViewBag.Theme == theme ? "selected" : null)">@theme</option>
+                }
+            }
         </select>
     </div>
     <input type="text" name="message" required style="width: 450px;" oninput="toggleButtonDisabled()" />
