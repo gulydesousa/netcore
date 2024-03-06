@@ -1,4 +1,3 @@
-using chatbot.Core.Interfaces;
 using chatbot.UI.Models;
 using chatbot.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -27,10 +26,9 @@ namespace chatbot.UI.Controllers
         public async Task<IActionResult> Index(string message, string theme)
         {
             var botMessage = await _chatbotApplicationService.GenerateResponseAsync(message, theme);
+            
             return View("Index", botMessage);
         }
-
-
 
         public IActionResult Privacy()
         {

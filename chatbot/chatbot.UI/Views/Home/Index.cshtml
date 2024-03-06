@@ -1,22 +1,39 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<form method="post" onsubmit="return DisplayProgressMessage(this, 'Sending...');">
+    <div style="display: flex; align-items: center;">
+        <h1 style="margin-right: 10px;">Chatbot</h1>
+        <select name="theme">
+            <option value="Python">Python</option>
+            <option value="JavaScript">JavaScript</option>
+            <option value="C#">C#</option>
+            <option value="Java">Java</option>
+            <!-- Add more options as needed -->
+        </select>
+    </div>
+    <input type="text" name="message" required style="width: 450px;" oninput="toggleButtonDisabled()" />
+    <button type="submit" id="submitButton" class="btn btn-primary" disabled>
+        <i class="fas fa-paper-plane"></i> Send
+    </button>
+</form>
 
-@model string
+<p class="respuesta">
+    <div class="spinner-border d-none spinner-respuesta" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
 
-<h1>Chatbot</h1>
-
-<p>@Html.Raw(Model)</p>
+    @Html.Raw(Model)
 </p>
 
-<form method="post">
-    <input type="text" name="message" required style="width: 500px;" />
-    <select name="theme">
-        <option value="Python">Python</option>
-        <option value="JavaScript">JavaScript</option>
-        <option value="C#">C#</option>
-        <option value="Java">Java</option>
-        <!-- Agrega más opciones según sea necesario -->
-    </select>
-    <button type="submit">Send</button>
-</form>
+<script>
+    function toggleButtonDisabled() {
+        var input = document.getElementsByName("message")[0];
+        var button = document.getElementById("submitButton");
+        button.disabled = input.value.trim() === "";
+    }
+
+    function DisplayProgressMessage(form, msg) {
+        var button = form.querySelector('button[type="submit"]');
+        button.disabled = true;
+        $(".spinner-border").removeClass("d-none");
+        return true;
+    }
+</script>

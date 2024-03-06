@@ -20,3 +20,17 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.spinner-respuesta {
+    position: absolute;
+    z-index: 1;
+}
+
+.respuesta {
+    position: relative;
+    z-index: 2;
+}
+
+form {
+    min-width: 550px;
+}
