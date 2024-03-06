@@ -34,6 +34,8 @@ namespace chatbot.UI.Controllers
             ViewBag.Themes = themes;
             ViewBag.Theme = model.Theme; // Almacena el tema seleccionado en el ViewBag
 
+            botMessage = $"<h3><i>\"{model.Message}\"</i></h3>" + botMessage; // Include the initial question as an h2 in botMessage with italics
+
             return View("Index", botMessage);
         }
 

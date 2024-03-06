@@ -22,24 +22,11 @@
 </form>
 
 <p class="respuesta">
-    <div class="spinner-border d-none spinner-respuesta" role="status">
+    <div class="spinner-border d-none spinner-respuesta text-primary" role="status">
         <span class="sr-only">Loading...</span>
     </div>
 
     @Html.Raw(Model)
 </p>
 
-<script>
-    function toggleButtonDisabled() {
-        var input = document.getElementsByName("message")[0];
-        var button = document.getElementById("submitButton");
-        button.disabled = input.value.trim() === "";
-    }
-
-    function DisplayProgressMessage(form, msg) {
-        var button = form.querySelector('button[type="submit"]');
-        button.disabled = true;
-        $(".spinner-border").removeClass("d-none");
-        return true;
-    }
-</script>
+<script src="~/js/scripts.js"></script>
