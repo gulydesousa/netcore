@@ -6,8 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddHttpClient<IChatbotService, ChatGPTService>();
 builder.Services.AddScoped<IMarkdownService, MarkdownService>();
+builder.Services.AddScoped<ILanguagesService, LanguagesService>();
+
 builder.Services.AddScoped<ChatbotApplicationService>();
 
 var app = builder.Build();

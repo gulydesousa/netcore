@@ -9,20 +9,24 @@ namespace chatbot.UI.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ChatbotApplicationService _chatbotApplicationService;
-        private List<string>  themes = new List<string> { "Python", "C#", "JavaScript", "Java", "Angular" };
+
+        public List<string> themes = new List<string>();
 
 
-        public HomeController(ILogger<HomeController> logger, ChatbotApplicationService chatbotApplicationService)
+        public HomeController(ILogger<HomeController> logger
+                            , ChatbotApplicationService chatbotApplicationService)
         {
             _logger = logger;
             _chatbotApplicationService = chatbotApplicationService;
+
+            // Inicializa 'themes' en un método separado para evitar bloquear el hilo principal
+            InitializeThemes();
         }
 
         [HttpGet]
         public IActionResult Index()
         {
             ViewBag.Themes = themes;
-
             return View();
         }
 
@@ -32,6 +36,7 @@ namespace chatbot.UI.Controllers
             var botMessage = await _chatbotApplicationService.GenerateResponseAsync(model.Message, model.Theme);
 
             ViewBag.Themes = themes;
+
             ViewBag.Theme = model.Theme; // Almacena el tema seleccionado en el ViewBag
 
             botMessage = $"<h3><i>\"{model.Message}\"</i></h3>" + botMessage; // Include the initial question as an h2 in botMessage with italics
@@ -39,6 +44,10 @@ namespace chatbot.UI.Controllers
             return View("Index", botMessage);
         }
 
+        private async void InitializeThemes()
+        {
+            themes = await _chatbotApplicationService.GetLanguagesAsync();
+        }
 
         public IActionResult Privacy()
         {
