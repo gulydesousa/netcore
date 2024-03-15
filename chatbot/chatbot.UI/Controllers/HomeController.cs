@@ -2,6 +2,7 @@ using chatbot.UI.Models;
 using chatbot.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace chatbot.UI.Controllers
 {
@@ -9,12 +10,22 @@ namespace chatbot.UI.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ChatbotApplicationService _chatbotApplicationService;
+       
+
+
+        public const string Name = "Alexandrie Grenier";
+        public const string Title = "Web Designer & Content Creator";
+        public const string Email = "alex@example.com";
+        public const string GitHub = "microsoft";
+        public const string Instagram = "microsoft";
+        public const string LinkedIn = "satyanadella";
+        public const string Medium = "";
+        public const string Twitter = "microsoft";
+        public const string YouTube = "Code";
 
         public List<string> themes = new List<string>();
 
-
-        public HomeController(ILogger<HomeController> logger
-                            , ChatbotApplicationService chatbotApplicationService)
+        public HomeController(ILogger<HomeController> logger, ChatbotApplicationService chatbotApplicationService)
         {
             _logger = logger;
             _chatbotApplicationService = chatbotApplicationService;
@@ -27,6 +38,17 @@ namespace chatbot.UI.Controllers
         public IActionResult Index()
         {
             ViewBag.Themes = themes;
+
+            ViewBag.Themes = themes;
+            ViewBag.Name = Name;
+            ViewBag.Title = Title;
+            ViewBag.Email = Email;
+            ViewBag.GitHub = GitHub;
+            ViewBag.Instagram = Instagram;
+            ViewBag.LinkedIn = LinkedIn;
+            ViewBag.Medium = Medium;
+            ViewBag.Twitter = Twitter;
+            ViewBag.YouTube = YouTube;
             return View();
         }
 
