@@ -2,7 +2,6 @@ using chatbot.UI.Models;
 using chatbot.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Xml.Linq;
 
 namespace chatbot.UI.Controllers
 {
@@ -10,9 +9,7 @@ namespace chatbot.UI.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ChatbotApplicationService _chatbotApplicationService;
-       
-
-
+        private List<HistoryItem> _history = new List<HistoryItem>();
 
         public List<string> themes = new List<string>();
 
@@ -28,6 +25,7 @@ namespace chatbot.UI.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            ViewBag.History = _history;
             ViewBag.Themes = themes;
 
             return View();
@@ -43,6 +41,9 @@ namespace chatbot.UI.Controllers
             ViewBag.Theme = model.Theme; // Almacena el tema seleccionado en el ViewBag
 
             botMessage = $"<h3><i>\"{model.Message}\"</i></h3>" + botMessage; // Include the initial question as an h2 in botMessage with italics
+
+            _history.Add(new HistoryItem { Language=model.Theme, Question=model.Message, Answer=botMessage });         
+            ViewBag.History = _history;
 
             return View("Index", botMessage);
         }

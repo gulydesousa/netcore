@@ -1,5 +1,6 @@
 ﻿@{
     var themes = ViewBag.Themes as List<string>;
+    var history = ViewBag.History as List<HistoryItem>;
 }
 
 <form method="post" onsubmit="return DisplayProgressMessage(this, 'Sending...');">
@@ -28,6 +29,7 @@
 
     @Html.Raw(Model)
 </p>
+
 
 
 <script src="~/js/scripts.js"></script>
