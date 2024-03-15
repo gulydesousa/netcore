@@ -28,6 +28,12 @@
     </div>
 
     @Html.Raw(Model)
+
+    @if (!string.IsNullOrEmpty(ViewBag.ImageUrl))
+    {
+        <img src="@ViewBag.ImageUrl" alt="Generated image">
+    }
+
 </p>
 
 

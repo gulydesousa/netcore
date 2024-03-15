@@ -8,7 +8,7 @@ namespace chatbot.Infrastructure
     {
         public Task<List<string>> GetLanguagesAsync()
         {
-            return Task.FromResult(new List<string> { "Python", "C#", "JavaScript", "Java", "Angular" });
+            return Task.FromResult(new List<string> { "Python", "C#", "JavaScript", "Java", "Angular", "About Sports" , "Traductor", "Poeta" , "Dall-e"});
 
         }
     }

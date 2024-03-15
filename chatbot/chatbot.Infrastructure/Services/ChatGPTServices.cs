@@ -20,7 +20,36 @@ namespace chatbot.Infrastructure
 
         public string GetApiKey()
         {
-            return _configuration["ChatGPT:ApiKey"] ?? string.Empty;
+            string apikey = _configuration["ChatGPT:ApiKey"] ?? string.Empty;
+
+            if (string.IsNullOrEmpty(apikey))
+                throw new Exception("ChatGPT API Key is missing");
+            else
+                return apikey;
+        }
+
+        private string content(string theme)
+        {
+            string result = $"You're a {theme} programming language instructor";
+            switch (theme)
+            {
+                case "About Sports":
+                    result = $"You are an expert  {theme} world records";
+                    break;
+                case "Traductor":
+                    result = $"You are a english translator";
+                    break;
+                case "Poeta":      
+                    result = $"Eres un poeta de origen Japones que escribe hermosos microrelatos poeticos";
+                    break;
+                case "Image Generator":
+
+                    break;
+                default:
+                    break;
+            }
+
+            return result;
         }
 
 
@@ -38,6 +67,7 @@ namespace chatbot.Infrastructure
             string result = string.Empty;
 
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/chat/completions");
+
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", GetApiKey());
 
             var requestBody = new
@@ -47,9 +77,14 @@ namespace chatbot.Infrastructure
                 //A list of messages comprising the conversation so far. 
                 messages = new[]
                 {
-                        new { role = "system", content = $"You're a {theme} instructor" },
+                        new { role = "system", content = content(theme)},
                         new { role = "user", content = message }
                     },
+
+                //How many chat completion choices to generate for each input message.
+                //Note that you will be charged based on the number of generated tokens across all of the choices.
+                //Keep n as 1 to minimize costs.
+                n = (theme == "Traductor" ? 3 : 1),
 
                 #region parameters
                 //Number between -2.0 and 2.0.
@@ -78,11 +113,6 @@ namespace chatbot.Infrastructure
 
                 //The maximum number of tokens that can be generated in the chat completion.
                 //max_tokens = new {},
-
-                //How many chat completion choices to generate for each input message.
-                //Note that you will be charged based on the number of generated tokens across all of the choices.
-                //Keep n as 1 to minimize costs.
-                //n = 1,
 
                 //Number between -2.0 and 2.0.
                 //Positive values penalize new tokens based on whether they appear in the text so far,
@@ -151,24 +181,67 @@ namespace chatbot.Infrastructure
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
-                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-
-                foreach (var item in responseData!.choices)
+                try
                 {
-                    var messageContent = item.message.content;
-                    var messageRole = item.message.role;
-                    result += $"<p><strong>{messageRole}:</strong> {messageContent}</p>";
+                    var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
 
+                    foreach (var item in responseData!.choices)
+                    {
+                        var messageContent = item.message.content;
+                        var messageRole = item.message.role;
+                        result += $"<p>{messageContent}</p>";
+                    }
+                }
+                catch (JsonException ex)
+                {
+                    throw new Exception("Error deserializing ChatGPT API response", ex);
                 }
 
                 //aplicar formato html a este resultado
-
                 return result;
             }
             else
             {
-                throw new Exception($"Error calling ChatGPT API: {response.StatusCode}");
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Error calling ChatGPT API: {response.StatusCode}. Response: {errorContent}");
             }
         }
+
+
+        public async Task<string> CallDallEApiAsync(string input)
+        {
+            string imageUrl = string.Empty;
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/images/generations");
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", GetApiKey());
+
+            var requestBody = new
+            {
+                model = "dall-e-3",
+                prompt = input,
+                n = 1,
+                size = "1024x1024"
+            };
+            request.Content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+
+                // Acceder a la propiedad "url"
+                if (responseData != null)  imageUrl = responseData.data[0].url;
+
+                return imageUrl;
+            }
+            else
+            {
+                throw new Exception($"Error calling DALL-E API: {response.StatusCode}");
+            }
+        }
+
     }
 }

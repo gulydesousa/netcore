@@ -1,3 +1,4 @@
+using chatbot.Infrastructure;
 using chatbot.UI.Models;
 using chatbot.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -34,19 +35,29 @@ namespace chatbot.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(ChatbotViewModel model)
         {
-            var botMessage = await _chatbotApplicationService.GenerateResponseAsync(model.Message, model.Theme);
+            string botMessage = $"<h3><i>\"{model.Message}\"</i></h3>";
+            string imageUrl = string.Empty;
 
             ViewBag.Themes = themes;
-
             ViewBag.Theme = model.Theme; // Almacena el tema seleccionado en el ViewBag
-
-            botMessage = $"<h3><i>\"{model.Message}\"</i></h3>" + botMessage; // Include the initial question as an h2 in botMessage with italics
-
-            _history.Add(new HistoryItem { Language=model.Theme, Question=model.Message, Answer=botMessage });         
-            ViewBag.History = _history;
+            //_history.Add(new HistoryItem { Language = model.Theme, Question = model.Message, Answer = botMessage });
+            //ViewBag.History = _history;
+            
+            if (model.Theme == "Dall-e")
+            {
+                imageUrl = await _chatbotApplicationService.CallDallEApiAsync(model.Message);
+                ViewBag.ImageUrl = imageUrl;                
+            }
+            else
+            {
+                string respuesta = await _chatbotApplicationService.GenerateResponseAsync(model.Message, model.Theme);
+                botMessage += respuesta; // Include the initial question as an h2 in botMessage with italics
+            }
 
             return View("Index", botMessage);
         }
+
+
 
         private async void InitializeThemes()
         {

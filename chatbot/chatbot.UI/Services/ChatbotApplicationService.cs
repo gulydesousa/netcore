@@ -24,6 +24,14 @@ namespace chatbot.UI.Services
             return result;
         }
 
+        public async Task<string> CallDallEApiAsync(string message)
+        {
+            string result = await _chatbotService.CallDallEApiAsync(message);
+            return result;
+        }
+
+
+
         public async Task<List<string>> GetLanguagesAsync()
         {
             List<string> languages = new List<string>();
