@@ -1,4 +1,3 @@
-using chatbot.Infrastructure;
 using chatbot.UI.Models;
 using chatbot.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +9,7 @@ namespace chatbot.UI.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ChatbotApplicationService _chatbotApplicationService;
-        private List<HistoryItem> _history = new List<HistoryItem>();
-
+   
         public List<string> themes = new List<string>();
 
         public HomeController(ILogger<HomeController> logger, ChatbotApplicationService chatbotApplicationService)
@@ -26,7 +24,6 @@ namespace chatbot.UI.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            ViewBag.History = _history;
             ViewBag.Themes = themes;
 
             return View();
