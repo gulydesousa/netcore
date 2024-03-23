@@ -11,32 +11,38 @@ public sealed class Alquiler : Entity
 
     public AlquilerStatus Status { get; private set; }
     public DateRange? Duracion { get; private set; }
-    public Guid? ClienteId { get; private set; }
+    public Guid? UserId { get; private set; }
     public Moneda? PrecioPorPeriodo { get; private set; }
-    public Moneda? Mantenimiento { get; private set; }
-    public Moneda? Accesorios { get; private set; }
+    public Moneda? PrecioMantenimiento { get; private set; }
+    public Moneda? PrecioAccesorios { get; private set; }
+    //Sera la suma de los precios anteriores: 
+    //PrecioPorPeriodo + PrecioMantenimiento + PrecioAccesorios
     public Moneda? PrecioTotal { get; private set; }
-
     public DateTime? FechaCreacion { get; private set; }
+    //Fecha en la que el usuario dice sí voy a alquilar el coche
     public DateTime? FechaConfirmacion { get; private set; }
+    //Fecha en la que el usuario dice no voy a alquilar el coche
     public DateTime? FechaDenegacion { get; private set; }
+    //Fecha en la que se ha completado toda la transacción
     public DateTime? FechaCompletado { get; private set; }
+    //A pesar que ya pagué, no puedo alquilar el coche
     public DateTime? FechaCancelacion { get; private set; }
 
-    public static Alquiler Reservar(Vehiculo vehiculo, DateRange duracion
-                                  , Guid clienteId, DateTime fechaCreacion
-                                  , PrecioService precioSvc)
+    public static Alquiler Reservar(Vehiculo vehiculo
+                                 , Guid userId
+                                 , DateRange duracion
+                                 , DateTime fechaCreacion
+                                 , PrecioService precioService)
     {
-        //Se crea un nuevo alquiler con el estado reservado
-        //Nos faltan los calculos de los precios, mantenimiento, accesorios y precio total
-        //Para no romper el DDD se deja a cargo de un servicio que se encargue de calcular los precios         
-        var precioDetalle = precioSvc.CalcularPrecio(vehiculo, duracion);
-          
+       
+        var precioDetalle = precioService.CalcularPrecio(vehiculo, duracion);
+
+
         var alquiler = new Alquiler(Guid.NewGuid()
                                 , vehiculo.Id!
                                 , AlquilerStatus.Reservado
                                 , duracion
-                                , clienteId
+                                , userId
                                 , precioDetalle.PrecioPorPeriodo
                                 , precioDetalle.Mantenimiento
                                 , precioDetalle.Accesorios
@@ -45,33 +51,35 @@ public sealed class Alquiler : Entity
 
         alquiler.RaiseDomainEvent(new AlquilerReservadoDomainEvent(alquiler.Id!));
 
+        //Fecha de creacion es la fecha del ultimo alquiler
         vehiculo.FechaUltimoAlquiler = fechaCreacion;
 
         return alquiler;
     }
-    
-    //Un vehiculo puede transitar por varios estados, por lo que se crea una lista de estados
+
+    //Un vehiculo puede transitar por varios estados
+    //, por lo que se crea una lista de estados
     private Alquiler(Guid id
     , Guid vehiculoId
     , AlquilerStatus status
     , DateRange? duracion
-    , Guid? clienteId
+    , Guid? userId
     , Moneda? precioPorPeriodo
-    , Moneda? mantenimiento
-    , Moneda? accesorios
+    , Moneda? precioMantenimiento
+    , Moneda? precioAccesorios
     , Moneda? precioTotal
-    , DateTime? fechaCreacion): base(id)
+    , DateTime? fechaCreacion) : base(id)
     {
         VehiculoId = vehiculoId;
         Status = status;
         Duracion = duracion;
-        ClienteId = clienteId;
+        UserId = userId;
         PrecioPorPeriodo = precioPorPeriodo;
-        Mantenimiento = mantenimiento;
-        Accesorios = accesorios;
+        PrecioMantenimiento = precioMantenimiento;
+        PrecioAccesorios = precioAccesorios;
         PrecioTotal = precioTotal;
         FechaCreacion = fechaCreacion;
-    }    
+    }
 
     public Result Confirmar(DateTime utcNow)
     {
@@ -79,14 +87,14 @@ public sealed class Alquiler : Entity
         {
             //Se disparará un evento de dominio para notificar que el alquiler no se puede confirmar
             return Result.Failure(AlquilerErrors.NotReserved);
-        }        
+        }
 
         Status = AlquilerStatus.Confirmado;
         FechaConfirmacion = utcNow;
 
         RaiseDomainEvent(new AlquilerConfirmadoDomainEvent(Id!));
         return Result.Success();
-    }   
+    }
 
     public Result Rechazar(DateTime utcNow)
     {
@@ -111,8 +119,8 @@ public sealed class Alquiler : Entity
         }
 
         var currentDate = DateTime.UtcNow.Date;
-        
-        if(Duracion != null && currentDate.CompareTo(Duracion.Start) > 0)
+
+        if (Duracion != null && currentDate.CompareTo(Duracion.Start) > 0)
         {
             return Result.Failure(AlquilerErrors.AlreadyStarted);
         }
@@ -125,7 +133,7 @@ public sealed class Alquiler : Entity
     }
 
 
- public Result Completar(DateTime utcNow)
+    public Result Completar(DateTime utcNow)
     {
         if (Status != AlquilerStatus.Confirmado)
         {

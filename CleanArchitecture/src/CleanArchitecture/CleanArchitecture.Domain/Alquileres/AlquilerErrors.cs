@@ -5,7 +5,7 @@ namespace CleanArchitecture.Domain.Alquileres
     public static class AlquilerErrors
     {
         public static Error NotFound = new Error(
-          "Alquiler.Found"
+          "Alquiler.NotFound"
         , "No se encontró el alquiler");
 
         //Representa cuando queremos reservar un vehiculo que ya está reservado

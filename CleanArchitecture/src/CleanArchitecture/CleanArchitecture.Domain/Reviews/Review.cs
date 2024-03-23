@@ -7,14 +7,10 @@ namespace CleanArchitecture.Domain.Reviews;
 public sealed class Review: Entity
 {
     public Guid VehiculoId { get; private set; }
-    public Guid AlquilerId { get; private set; }
-    
+    public Guid AlquilerId { get; private set; } 
     public Guid UserId { get; private set; }
-
     public Rating Rating { get; private set; }
-
     public Comentario Comentario { get; private set; }
-
     public DateTime FechaCreacion { get; private set; }
 
     private Review(Guid id
@@ -49,7 +45,7 @@ public sealed class Review: Entity
         Guid.NewGuid(),
         alquiler.VehiculoId,
         alquiler.Id,
-        alquiler.ClienteId ?? Guid.Empty,
+        alquiler.UserId ?? Guid.Empty,
         rating,
         comentario,
         fechaCreacion);

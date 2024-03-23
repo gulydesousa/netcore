@@ -7,7 +7,6 @@ namespace CleanArchitecture.Domain.Alquileres
         Recogido=3,
         Cancelado=4,
         Completado=5,
-
         Rechazar=6
     }
 }

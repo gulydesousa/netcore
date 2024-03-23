@@ -3,7 +3,8 @@ using CleanArchitecture.Domain.Abstractions;
 namespace CleanArchitecture.Domain.Reviews;
 
 public sealed record Rating{
-    public static readonly Error Invalid = new("Rating.Invalid", "The rating must be between 1 and 5");
+    public static readonly Error Invalid 
+    = new("Rating.Invalid", "The rating must be between 1 and 5");
     public int Value { get; }
 
     private Rating(int value)

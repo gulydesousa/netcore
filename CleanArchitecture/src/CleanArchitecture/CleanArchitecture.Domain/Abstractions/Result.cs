@@ -6,12 +6,9 @@ public class Result
 {
     public bool IsSuccess { get; }
     public Error Error { get; }
-    public bool IsFailure => !IsSuccess;
-    
+    public bool IsFailure => !IsSuccess; 
     public static Result Success() => new Result(true, Error.None);
-
     public static Result Failure(Error error) => new Result(false, error);
-
 
     //Se crea un constructor protegido para que solo las clases que 
     //hereden de Result puedan crear instancias

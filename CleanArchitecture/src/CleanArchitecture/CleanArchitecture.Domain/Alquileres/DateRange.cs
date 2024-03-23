@@ -18,7 +18,7 @@ public sealed record DateRange
     {
         if (start > end)
         {
-            throw new ArgumentException("Start date must be before end date");
+            throw new ApplicationException("Start date must be before end date");
         }
 
         return new DateRange(start, end);
