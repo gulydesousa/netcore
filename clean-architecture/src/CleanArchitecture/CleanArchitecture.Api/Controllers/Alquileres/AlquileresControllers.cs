@@ -26,16 +26,24 @@ public class AlquileresController : ControllerBase
         return response.IsSuccess ? Ok(response.Value) : NotFound();
     }
 
-    [HttpPost]
+    [HttpPost("ReservarAlquiler")]
     public async Task<IActionResult> ReservarAlquiler(
         AlquilerReservaRequest request,
         CancellationToken cancellationToken)
     {
+        DateTime dateStart;
+        DateTime dateEnd;
+        if (!DateTime.TryParse(request.FechaInicio, out dateStart) ||
+            !DateTime.TryParse(request.FechaFin, out dateEnd))
+        {
+            return BadRequest("Invalid date format. Please use 'yyyy-MM-dd'.");
+        }
+
         var query = new ReservarAlquilerCommand(       
             request.VehiculoId,
             request.UserId,
-            request.FechaInicio,
-            request.FechaFin
+            dateStart,
+            dateEnd
         ); 
         var response = await _sender.Send(query, cancellationToken);
 

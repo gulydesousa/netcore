@@ -8,7 +8,7 @@ public class ReservarAlquilerCommandValidator : AbstractValidator<ReservarAlquil
     {
         RuleFor(x => x.userId).NotEmpty();
         RuleFor(x => x.vehiculoId).NotEmpty();
-        RuleFor(x => x.fechaInicio).LessThan(x => x.fechaFin);
+        RuleFor(x => x.fechaInicio).NotEmpty().GreaterThanOrEqualTo(x => x.fechaFin);
     }
 }
 
