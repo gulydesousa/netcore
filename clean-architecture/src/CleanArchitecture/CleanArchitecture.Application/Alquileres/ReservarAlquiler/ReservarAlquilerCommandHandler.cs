@@ -4,6 +4,7 @@ using CleanArchitecture.Domain.Abstractions;
 using CleanArchitecture.Domain.Alquileres;
 using CleanArchitecture.Domain.Users;
 using CleanArchitecture.Domain.Vehiculos;
+using CleanArchitecture.Application.Exceptions;
 
 namespace CleanArchitecture.Application.Alquileres.ReservarAlquiler;
 
@@ -39,7 +40,7 @@ internal sealed class ReservarAlquilerCommandHandler : ICommandHandler<ReservarA
         _precioService = precioService;
         _unitOfWork = unitOfWork;
     }
-    
+
     /// <summary>
     /// Handles the ReservarAlquilerCommand by processing the request and performing the necessary operations.
     /// </summary>
@@ -52,15 +53,15 @@ internal sealed class ReservarAlquilerCommandHandler : ICommandHandler<ReservarA
         ReservarAlquilerCommand request
       , CancellationToken cancellationToken)
     {
-       
-       //Se busca el usuario por el id proporcionado en el comando.
+
+        //Se busca el usuario por el id proporcionado en el comando.
         var user = await _userRepository.GetByIdAsync(request.userId, cancellationToken);
-        
+
         if (user is null)
         {
             return Result.Failure<Guid>(UserErrors.NotFound);
         }
-         
+
         //Se busca el vehículo por el id proporcionado en el comando.
         var vehiculo = await _vehiculoRepository.GetByIdAsync(request.vehiculoId, cancellationToken);
 
@@ -68,29 +69,36 @@ internal sealed class ReservarAlquilerCommandHandler : ICommandHandler<ReservarA
         {
             return Result.Failure<Guid>(VehiculoErrors.NotFound);
         }
-        
+
         //Se crea un objeto DateRange con las fechas de inicio y fin proporcionadas en el comando.
         var duracion = DateRange.Create(request.fechaInicio, request.fechaFin);
-        
+
         //Se verifica si hay superposición de fechas para el vehículo proporcionado.
-        if(await _alquilerRepository.IsOverlappingAsync(vehiculo, (DateRange)duracion, cancellationToken))
+        if (await _alquilerRepository.IsOverlappingAsync(vehiculo, (DateRange)duracion, cancellationToken))
         {
             return Result.Failure<Guid>(AlquilerErrors.Overlap);
         }
-       
-       //Se reserva el alquiler con los datos proporcionados.
-        var alquiler = Alquiler.Reservar(
-            vehiculo,
-            user.Id,
-            (DateRange)duracion,
-            _dateTimeProvider.CurrentTime,
-            _precioService);
-        //Se agrega el alquiler a la base de datos.
-        _alquilerRepository.Add(alquiler);
-        //Se guardan los cambios en la base de datos.
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        //Se devuelve el id del alquiler reservado.
-        return Result.Success(alquiler.Id);
+        try
+        {
+            //Se reserva el alquiler con los datos proporcionados.
+            var alquiler = Alquiler.Reservar(
+                vehiculo,
+                user.Id,
+                (DateRange)duracion,
+                _dateTimeProvider.CurrentTime,
+                _precioService);
+            //Se agrega el alquiler a la base de datos.
+            _alquilerRepository.Add(alquiler);
+            //Se guardan los cambios en la base de datos.
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            //Se devuelve el id del alquiler reservado.
+            return Result.Success(alquiler.Id);
+        }
+        catch (ConcurrencyException)
+        {
+            return Result.Failure<Guid>(AlquilerErrors.Overlap);
+        }
     }
 }

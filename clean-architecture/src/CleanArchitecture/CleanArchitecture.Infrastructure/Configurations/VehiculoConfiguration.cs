@@ -37,5 +37,7 @@ internal sealed class VehiculoConfiguration : IEntityTypeConfiguration<Vehiculo>
         });
 
         builder.OwnsOne(x => x.Direccion); 
+
+        builder.Property<uint>("Version").IsRowVersion();
     }
 }
