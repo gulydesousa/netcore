@@ -4,6 +4,9 @@ namespace CleanArchitecture.Domain.Abstractions
     //Solo sus hijos pueden ser instanciados
     public abstract class Entity
     {
+        //protected: solo puede ser accedido por las clases que heredan de esta clase
+        protected Entity() { }
+
         //Lista de eventos de dominio
         //Solo puede ser accedida por la clase que hereda de esta clase
         private readonly List<IDomainEvent> _domainEvents = new List<IDomainEvent>();

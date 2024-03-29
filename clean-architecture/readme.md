@@ -126,3 +126,73 @@ dotnet add package EFCore.NamingConventions
 ```
 dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
 ```
+
+## Clean Architecture: API
+
+1. Creamos nuestro proyecto API
+
+```
+$ dotnet new webapi -o src/CleanArchitecture/CleanArchitecture.Api --name CleanArchitecture.Api
+```
+
+2. Vincularlo a la solución
+```
+ $ dotnet sln add CleanArchitecture/CleanArchitecture.Api/CleanArchitecture.Api.csproj
+```
+
+3. Api depende de Application e Infrastructure, agregamos las referencias
+```
+$ dotnet add CleanArchitecture/CleanArchitecture.Api/CleanArchitecture.Api.csproj reference CleanArchitecture/CleanArchitecture.Application/CleanArchitecture.Application.csproj
+
+$ dotnet add CleanArchitecture/CleanArchitecture.Api/CleanArchitecture.Api.csproj reference CleanArchitecture/CleanArchitecture.Infrastructure/CleanArchitecture.Infrastructure.csproj
+```
+
+## Clean Architecture: Bases de datos
+
+
+1. Crean una base de datos en SQL SERVER `clean-architecture`
+
+2. Configuramos la conexión en el appsettings.json
+
+```
+{
+  "ConnectionStrings": {
+    "Database": "Data Source=GULYDESOUSA;Initial Catalog=clean-architecture;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}
+```
+
+3. Instalar el soporte de EF para las migraciones.
+```
+$ cd src/CleanArchitecture/CleanArchitecture.Api
+$ dotnet add package Microsoft.EntityFrameworkCore.Design --version 8.0.3
+$ dotnet add package Microsoft.EntityFrameworkCore.Tools --version 8.0.3
+```
+
+4. Ejecutamos la migración desde el directorio raiz clean-architecture
+```
+$ dotnet ef --verbose migrations add InitialCreate -p src/CleanArchitecture/CleanArchitecture.Infrastructure -s src/CleanArchitecture/CleanArchitecture.Api 
+```
+
+5. Las migraciones se ejecutan automaticamente ejecutando CleanArchitecture.Api
+
+```
+$ dotnet run --project src/CleanArchitecture/CleanArchitecture.Api 
+```
+
+6. Cargar datos de prueba
+Instalar el paquete  Bogus en el directorio de la api
+
+```
+$ dotnet add package Bogus 
+```
+
+
+

@@ -45,16 +45,16 @@ internal sealed class SearchVehiculosQueryHandler
                 v.vin AS Vin,
                 v.precio_monto AS Precio,
                 v.precio_tipo_moneda AS TipoMoneda,
-                d.direccion_pais AS Pais,
-                d.direccion_departamento AS Departamento,
-                d.direccion_provincia AS Provincia,
-                d.direccion_ciudad AS Ciudad,
-                d.direccion_calle AS Calle
+                v.direccion_pais AS Pais,
+                v.direccion_departamento AS Departamento,
+                v.direccion_provincia AS Provincia,
+                v.direccion_ciudad AS Ciudad,
+                v.direccion_calle AS Calle
             FROM vehiculos AS V
             LEFT JOIN alquileres AS A 
-            ON v.id = a.vehiculo_id
-            a.duracion_inicio >= @StarDate AND
-            a.duracion_final <= @EndDate AND
+            ON v.id = a.vehiculo_id AND
+            a.duracion_start >= @StarDate AND
+            a.duracion_end <= @EndDate AND
             a.status IN ({inClause})
             WHERE a.id IS NULL";
 

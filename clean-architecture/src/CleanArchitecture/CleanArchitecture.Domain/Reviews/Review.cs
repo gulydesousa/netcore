@@ -6,6 +6,8 @@ namespace CleanArchitecture.Domain.Reviews;
 
 public sealed class Review: Entity
 {
+    private Review() { }
+    
     public Guid VehiculoId { get; private set; }
     public Guid AlquilerId { get; private set; } 
     public Guid UserId { get; private set; }

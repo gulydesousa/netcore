@@ -5,6 +5,7 @@ namespace CleanArchitecture.Domain.Users;
 //sealed: no se puede heredar de esta clase
 public sealed class User : Entity
 {
+    private User() { }
     //private set; is used to make the property immutable
     //Ningún valor puede ser asignado a la propiedad fuera del constructor
     //private set; no puede cambiar el valor de la propiedad fuera del constructor

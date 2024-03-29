@@ -28,14 +28,17 @@ internal sealed class ReviewConfiguration : IEntityTypeConfiguration<Review>
 
         builder.HasOne<Vehiculo>()
         .WithMany()
-        .HasForeignKey(x => x.VehiculoId);
+        .HasForeignKey(x => x.VehiculoId)
+        .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne<Alquiler>()
         .WithMany()
-        .HasForeignKey(x => x.AlquilerId);
+        .HasForeignKey(x => x.AlquilerId)
+        .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne<User>()
         .WithMany()
-        .HasForeignKey(x => x.UserId);
+        .HasForeignKey(x => x.UserId)
+        .OnDelete(DeleteBehavior.NoAction);
     }
 }
