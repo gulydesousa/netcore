@@ -30,7 +30,7 @@ public class ValidationBehaviour<TRequest, TResponse>
         //Retornamos los errores de validación
         var validationErrors =
                _validators.Select(validators => validators.Validate(context))
-               .Where(result => !result.Errors.Any())
+               .Where(result => result.Errors.Any())
                .SelectMany(result => result.Errors)
                //Quiero mapear los errores a un string
                .Select(error => new ValidationError(

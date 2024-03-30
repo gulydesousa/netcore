@@ -24,6 +24,19 @@ public sealed record DateRange
         return new DateRange(start, end);
     }
 
+    public static DateRange Create(string start, string end)
+    {
+        if (!DateOnly.TryParse(start, out DateOnly parsedStart) ||
+            !DateOnly.TryParse(end, out DateOnly parsedEnd))
+        {
+            throw new FormatException("Invalid date format. Please use 'yyyy-MM-dd'.");
+        }
+
+        return Create(parsedStart, parsedEnd);
+    }
+
+
+
     public static object Create(DateTime fechaInicio, DateTime fechaFin)
     {
         throw new NotImplementedException();

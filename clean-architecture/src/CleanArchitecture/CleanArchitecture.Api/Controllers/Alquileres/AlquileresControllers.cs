@@ -1,3 +1,4 @@
+using CleanArchitecture.Api.Shared.ApiDateRange;
 using CleanArchitecture.Application.Alquileres.GetAlquiler;
 using CleanArchitecture.Application.Alquileres.ReservarAlquiler;
 using MediatR;
@@ -28,32 +29,34 @@ public class AlquileresController : ControllerBase
 
     [HttpPost("ReservarAlquiler")]
     public async Task<IActionResult> ReservarAlquiler(
-        AlquilerReservaRequest request,
+        AlquilerReservarRequest request,
         CancellationToken cancellationToken)
     {
-        DateTime dateStart;
-        DateTime dateEnd;
-        if (!DateTime.TryParse(request.FechaInicio, out dateStart) ||
-            !DateTime.TryParse(request.FechaFin, out dateEnd))
-        {
-            return BadRequest("Invalid date format. Please use 'yyyy-MM-dd'.");
-        }
+        #region validar el rango de fechas
+        ApiDateRangeRequest dateRequest = new ApiDateRangeRequest(request);
+        var validator = new ApiDateRangeRequestDateOnlyValidator();
+        var validationResult = validator.Validate(dateRequest);
 
-        var query = new ReservarAlquilerCommand(       
+        if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
+
+        var dateRange = new ApiDateRangeDateOnly(dateRequest);
+        #endregion validar el rango de fechas
+
+        var query = new ReservarAlquilerCommand(
             request.VehiculoId,
             request.UserId,
-            dateStart,
-            dateEnd
-        ); 
+            dateRange.FechaInicio, 
+            dateRange.FechaFin);
+
         var response = await _sender.Send(query, cancellationToken);
 
-        if(response.IsFailure)
+        if (response.IsFailure)
         {
             return BadRequest(response.Error);
         }
-        
-        return CreatedAtAction( nameof(GetAlquiler), 
-                                new { id = response.Value }, 
+
+        return CreatedAtAction(nameof(GetAlquiler),
+                                new { id = response.Value },
                                 response.Value);
     }
 }

@@ -13,6 +13,6 @@ namespace CleanArchitecture.Application.Alquileres.ReservarAlquiler;
 public record ReservarAlquilerCommand(
     Guid vehiculoId,
     Guid userId,
-    DateTime fechaInicio,
-    DateTime fechaFin
+    DateOnly fechaInicio,
+    DateOnly fechaFin
 ): ICommand<Guid>;

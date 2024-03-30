@@ -1,6 +1,6 @@
 namespace CleanArchitecture.Api.Controllers.Alquileres;
 
-public sealed record AlquilerReservaRequest(
+public sealed record AlquilerReservarRequest(
     Guid VehiculoId,
     Guid UserId,
     string FechaInicio,
