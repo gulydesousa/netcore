@@ -1,0 +1,864 @@
+{
+	"info": {
+		"_postman_id": "a72685c6-a88a-43d5-945d-388438d51dbd",
+		"name": "Too Rental API",
+		"description": "# [Curso de Udemy: Link a la documentación](https://github.com/vdespa/quick-introduction-to-postman/blob/main/simple-tool-rental-api.md)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27686412"
+	},
+	"item": [
+		{
+			"name": "Tools",
+			"item": [
+				{
+					"name": "Get All Tools",
+					"item": [
+						{
+							"name": "Get all tools",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", ()=>{\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Hay datos, el formato es el esperado\", ()=>{\r",
+											"    const jsonData = pm.response.json();\r",
+											"    //console.log(jsonData);\r",
+											"    \r",
+											"    // Verificar que la respuesta sea un array\r",
+											"    pm.expect(jsonData).to.be.an('array');\r",
+											"\r",
+											"    // Verificar que al menos haya un elemento en el array\r",
+											"    pm.expect(jsonData.length).to.be.at.least(1);\r",
+											"\r",
+											"// Verificar la estructura de cada elemento del array\r",
+											"    jsonData.forEach(function(item) {\r",
+											"        // Verificar que cada elemento tenga las propiedades esperadas\r",
+											"        pm.expect(item).to.have.property('id');\r",
+											"        pm.expect(item).to.have.property('category');\r",
+											"        pm.expect(item).to.have.property('name');\r",
+											"        pm.expect(item).to.have.property('inStock');\r",
+											"        // Verificar el tipo de cada propiedad si es necesario\r",
+											"        pm.expect(item.id).to.be.a('number');\r",
+											"        pm.expect(item.category).to.be.a('string');\r",
+											"        pm.expect(item.name).to.be.a('string');\r",
+											"        pm.expect(item.inStock).to.be.a('boolean');\r",
+											"    });\r",
+											"\r",
+											"});\r",
+											"\r",
+											"//****************************************************** */\r",
+											"// Obtener solo los tools que tienen \"inStock\" igual a true\r",
+											"// Obtener la respuesta JSON\r",
+											"var responseData = pm.response.json();\r",
+											"// Verificar si responseData es un array\r",
+											"if (Array.isArray(responseData)) {\r",
+											"    // Filtrar solo los tools que tienen \"inStock\" igual a true\r",
+											"    var inStockTools = responseData.filter(function(item) {\r",
+											"        return item.inStock === true;\r",
+											"    });\r",
+											"\r",
+											"    // Verificar si hay tools en stock\r",
+											"    if (inStockTools.length > 0) {\r",
+											"        // Seleccionar un tool aleatorio del array\r",
+											"        var randomTool = inStockTools[Math.floor(Math.random() * inStockTools.length)];\r",
+											"\r",
+											"        // Obtener el ID del tool seleccionado aleatoriamente\r",
+											"        var randomToolId = randomTool.id;\r",
+											"\r",
+											"        // Asignar el ID del tool aleatorio a la variable global\r",
+											"        pm.globals.set(\"ToolId\", randomToolId);\r",
+											"    }\r",
+											"}\r",
+											"//****************************************************** */   \r",
+											"\r",
+											"pm.test(\"Tools en Stock\", ()=>{\r",
+											"    pm.expect(inStockTools.length).to.be.above(0);;    \r",
+											"});\r",
+											"\r",
+											"\r",
+											"postman.setNextRequest(\"Create order\");\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/tools?category={{Category}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"tools"
+									],
+									"query": [
+										{
+											"key": "results",
+											"value": "2",
+											"disabled": true
+										},
+										{
+											"key": "available",
+											"value": "true",
+											"description": "Optional - Specifies the availability of the tools. By default, all tools will be displayed.",
+											"disabled": true
+										},
+										{
+											"key": "category",
+											"value": "{{Category}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all tools paramError",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", ()=>{\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/tools?category=electric-generators&results=2&available=truex",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"tools"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "electric-generators",
+											"description": "Optional - Specifies the category of tools you want to be returned. It can be one of: ladders, plumbing, power-tools, trailers, electric-generators, lawn-care."
+										},
+										{
+											"key": "results",
+											"value": "2",
+											"description": "Optional - Specifies the number of results you want. Must be number between 1 and 20. By default, only 20 tools will be displayed."
+										},
+										{
+											"key": "available",
+											"value": "truex",
+											"description": "Optional - Specifies the availability of the tools. By default, all tools will be displayed."
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Tool by Id",
+					"item": [
+						{
+							"name": "Get tool by id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"// Definimos los tipos de datos esperados para cada clave\r",
+											"const expectedTypes = {\r",
+											"    \"id\": \"number\",\r",
+											"    \"category\": \"string\",\r",
+											"    \"name\": \"string\",\r",
+											"    \"manufacturer\": \"string\",\r",
+											"    \"price\": \"number\",\r",
+											"    \"current-stock\": \"number\",\r",
+											"    \"inStock\": \"boolean\",\r",
+											"    \"user-manual\": \"string\"\r",
+											"};\r",
+											"\r",
+											"// Función para verificar los tipos de datos\r",
+											"function validateDataTypes(data, expectedTypes) {\r",
+											"    for (var key in expectedTypes) {\r",
+											"        if (typeof data[key] !== expectedTypes[key]) {\r",
+											"            return false;\r",
+											"        }\r",
+											"    }\r",
+											"    return true;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Status code is 200\", ()=>{\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//*************************************/\r",
+											"// Parseamos la respuesta JSON\r",
+											"const jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"El formato de los resultados es el esperado\", () =>{\r",
+											"// Verifica los tipos de datos de la respuesta\r",
+											"pm.expect(validateDataTypes(jsonData, expectedTypes)).to.eql(true);\r",
+											"});\r",
+											"/***********************************/\r",
+											"\r",
+											"pm.test(\"Check tool\", ()=>{\r",
+											"    // Verificar si el campo \"current-stock\" existe en el objeto JSON\r",
+											"    pm.expect(jsonData.hasOwnProperty(\"current-stock\")).to.be.true;\r",
+											"\r",
+											"    // Verificar que el valor del campo \"current-stock\" sea mayor que 0\r",
+											"    pm.expect(jsonData[\"current-stock\"]).to.be.above(0);\r",
+											"\r",
+											"    pm.expect(jsonData[\"id\"]).to.be.eql(pm.globals.get(\"ToolId\"));\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/tools/:toolId?user-manual=true",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"tools",
+										":toolId"
+									],
+									"query": [
+										{
+											"key": "user-manual",
+											"value": "true",
+											"description": "Optional - Returns the user manual in PDF format."
+										}
+									],
+									"variable": [
+										{
+											"key": "toolId",
+											"value": "{{ToolId}}",
+											"description": "\tSpecifies the id of the tool you wish to retrieve."
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get tool by id paramError",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", ()=>{\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/tools/:toolId?user-manual=truex",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"tools",
+										":toolId"
+									],
+									"query": [
+										{
+											"key": "user-manual",
+											"value": "truex",
+											"description": "Optional - Returns the user manual in PDF format."
+										}
+									],
+									"variable": [
+										{
+											"key": "toolId",
+											"value": "{{ToolId}}",
+											"description": "\tSpecifies the id of the tool you wish to retrieve."
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Create",
+					"item": [
+						{
+							"name": "Create order",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifica que el código de estado sea 204 No Content\r",
+											"pm.test(\"Código de estado es 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"// Parsea el cuerpo de la respuesta JSON\r",
+											"var responseBody = pm.response.json();\r",
+											"\r",
+											"// Extrae el valor de \"orderId\" del cuerpo de la respuesta\r",
+											"var orderId = responseBody.orderId;\r",
+											"\r",
+											"// Almacena el valor de \"orderId\" en una variable de entorno llamada \"orderId\"\r",
+											"pm.globals.set(\"orderId\", orderId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"toolId\": {{ToolId}},\r\n \"customerName\": \"{{$randomFullName}}\",\r\n \"comment\": \"{{$randomLoremText}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/orders",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"orders"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Single Order",
+					"item": [
+						{
+							"name": "Get single order",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/orders/:orderId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"orders",
+										":orderId"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": "{{orderId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get all Orders",
+					"item": [
+						{
+							"name": "Get all orders",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Verifica que el código de estado sea 200 OK\r",
+											"pm.test(\"Código de estado es 200 OK\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Parsea la respuesta JSON\r",
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"// Verifica que la respuesta sea un arreglo\r",
+											"pm.test(\"La respuesta es un arreglo\", function () {\r",
+											"    pm.expect(jsonData).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"// Verifica que cada elemento del arreglo tenga el formato esperado\r",
+											"jsonData.forEach(function(item) {\r",
+											"    pm.test(\"El objeto tiene el formato esperado\", function () {\r",
+											"        pm.expect(item).to.have.property(\"id\").that.is.a(\"string\");\r",
+											"        pm.expect(item).to.have.property(\"toolId\").that.is.a(\"number\");\r",
+											"        pm.expect(item).to.have.property(\"customerName\").that.is.a(\"string\");\r",
+											"        pm.expect(item).to.have.property(\"quantity\").that.is.a(\"number\");\r",
+											"        pm.expect(item).to.have.property(\"created\").that.is.a(\"string\").and.match(/^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2}).(\\d{3})Z$/);\r",
+											"        pm.expect(item).to.have.property(\"comment\").that.is.a(\"string\");\r",
+											"    });\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/orders",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"orders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all orders Unauthorized",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", ()=>{\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "123456789",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/orders",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"orders"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete Order",
+					"item": [
+						{
+							"name": "Delete Order",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/orders/:orderId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"orders",
+										":orderId"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": "{{orderId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Update Order",
+					"item": [
+						{
+							"name": "Update order",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{apiToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"customerName\": \"Franchesca {{$randomLastName}}\",\r\n    \"comment\": \"No gracias\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/orders/:orderId",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"orders",
+										":orderId"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": "Y948PXY5FzSveykLnvSmt"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "API Client Registration",
+			"item": [
+				{
+					"name": "Registration Token OK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verifica que el código de estado sea 201 Created\r",
+									"pm.test(\"Código de estado es 201 Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"// Parsea la respuesta JSON\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"// Verifica que el campo accessToken esté presente en la respuesta\r",
+									"pm.test(\"Campo 'accessToken' está presente en la respuesta\", function () {\r",
+									"    pm.expect(jsonData).to.have.property('accessToken');\r",
+									"});\r",
+									"\r",
+									"// Verifica que el campo accessToken no esté vacío\r",
+									"pm.test(\"Campo 'accessToken' no está vacío\", function () {\r",
+									"    pm.expect(jsonData.accessToken).to.not.be.empty;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"clientName\": \"Postman\",\r\n   \"clientEmail\": \"{{$randomEmail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api-clients",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api-clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration Token Registrado",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verifica que el código de estado sea 400 Bad Request\r",
+									"pm.test(\"Conflicto: Este email ya está autorizado\", function () {\r",
+									"    pm.response.to.have.status(409);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"clientName\": \"Postman\",\r\n   \"clientEmail\": \"gdesousa@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api-clients",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api-clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration Token paramError",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verifica que el código de estado sea 400 Bad Request\r",
+									"pm.test(\"Código de estado es 400 Bad Request\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"clientName\": \"Postman\",\r\n   \"clientEmail\": \"{{$randomAbbreviation}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api-clients",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api-clients"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Client Registration Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"clientName\": \"Postman\",\r\n   \"clientEmail\": \"{{clientEmail}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api-clients",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api-clients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", \r",
+							"function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status is UP\", \r",
+							"function(){\r",
+							"    const response = pm.response.json();\r",
+							"    //console.log(response.status);\r",
+							"    pm.expect(response.status).to.eq(\"UP\");\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/status",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "https://simple-tool-rental-api.glitch.me"
+		},
+		{
+			"key": "apiToken",
+			"value": "588933dcaba0025660f20b05a159a9f5065d6f31feb842d666af123267e4f17b",
+			"type": "string"
+		}
+	]
+}
