@@ -3,19 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloCS", "HelloCS\HelloCS.csproj", "{0D2AC678-C85A-40F5-A7DD-F4BE356E4EE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hello-cs", "HelloCS\hello-cs.csproj", "{0D2AC678-C85A-40F5-A7DD-F4BE356E4EE9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AboutMyEnviroment", "AboutMyEnviroment\AboutMyEnviroment.csproj", "{67F2DA0E-D053-43A4-840C-08946E79CCAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "about-my-environment", "AboutMyEnviroment\about-my-environment.csproj", "{67F2DA0E-D053-43A4-840C-08946E79CCAE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloCS_", "HelloCS_\HelloCS_.csproj", "{DD22E8CB-81E7-4B7C-8434-354F6C9B9206}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hello-cs_", "HelloCS_\hello-cs_.csproj", "{DD22E8CB-81E7-4B7C-8434-354F6C9B9206}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AboutMyEnviroment_", "AboutMyEnviroment_\AboutMyEnviroment_.csproj", "{0C50E552-1058-40B6-8952-B15D7CB21BFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "about-my-environment_", "AboutMyEnviroment_\about-my-environment_.csproj", "{0C50E552-1058-40B6-8952-B15D7CB21BFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arguments", "Arguments\Arguments.csproj", "{1CD932EE-7019-4628-A6FA-8F322B7E3148}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arguments", "Arguments\Arguments.csproj", "{1CD932EE-7019-4628-A6FA-8F322B7E3148}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncConsole", "AsyncConsole\AsyncConsole.csproj", "{AE4A9B38-7059-44FA-97E3-00C630E0C583}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncConsole", "AsyncConsole\AsyncConsole.csproj", "{AE4A9B38-7059-44FA-97E3-00C630E0C583}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch02Ex03Numbers", "Ch02Ex03Numbers\Ch02Ex03Numbers.csproj", "{4D484610-6D7D-42CC-A93B-4CD735939916}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ch02Ex03Numbers", "Ch02Ex03Numbers\Ch02Ex03Numbers.csproj", "{4D484610-6D7D-42CC-A93B-4CD735939916}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "chapter01", "chapter01", "{D886E4C3-A907-43B5-B5AE-E3FF33BF27C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "chapter02", "chapter02", "{E7CB2D08-8B5F-437A-B65C-88C1B379EBA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +58,15 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0D2AC678-C85A-40F5-A7DD-F4BE356E4EE9} = {D886E4C3-A907-43B5-B5AE-E3FF33BF27C5}
+		{67F2DA0E-D053-43A4-840C-08946E79CCAE} = {E7CB2D08-8B5F-437A-B65C-88C1B379EBA3}
+		{DD22E8CB-81E7-4B7C-8434-354F6C9B9206} = {D886E4C3-A907-43B5-B5AE-E3FF33BF27C5}
+		{0C50E552-1058-40B6-8952-B15D7CB21BFA} = {E7CB2D08-8B5F-437A-B65C-88C1B379EBA3}
+		{1CD932EE-7019-4628-A6FA-8F322B7E3148} = {D886E4C3-A907-43B5-B5AE-E3FF33BF27C5}
+		{AE4A9B38-7059-44FA-97E3-00C630E0C583} = {D886E4C3-A907-43B5-B5AE-E3FF33BF27C5}
+		{4D484610-6D7D-42CC-A93B-4CD735939916} = {D886E4C3-A907-43B5-B5AE-E3FF33BF27C5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9140F9A7-883F-4037-8FB4-D9E7B31B9ED5}
