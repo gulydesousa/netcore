@@ -25,7 +25,9 @@ class Program
         double b0 = 0.2;
 
         Console.WriteLine($"double a: {a0}, double b: {b0}, a + b: {a0 + b0}, equal: {(a0 + b0 == 0.3 ? "yes" : "no")}");
-
+        //Un bloque unsafe permite el uso de punteros
+        //Para usar Half e Int128 tenemos que usar unsafe porque no son tipos de datos primitivos
+        //usafe en estos casos es para permitir el uso de punteros y no para hacer el código inseguro
         unsafe
         {
             Console.WriteLine($"Half bytes: {sizeof(Half)}, Half min value: {Half.MinValue}, Half max value: {Half.MaxValue}");

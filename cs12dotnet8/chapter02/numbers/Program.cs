@@ -20,3 +20,15 @@ WriteLine($"{"double",-10} {sizeof(double),-20} {double.MinValue,32} {double.Max
 WriteLine($"{"decimal",-10} {sizeof(decimal),-20} {decimal.MinValue,32} {decimal.MaxValue,45}");
 WriteLine($"{"char",-10} {sizeof(char),-20} {char.MinValue,32} {char.MaxValue,45}");
 WriteLine($"{"bool",-10} {sizeof(bool),-20} {bool.FalseString,32} {bool.TrueString,45}");
+
+//Escribir un millon usando la notación con _ para mejorar la legibilidad
+WriteLine(1_000_000);
+
+//Escribir 2.3 como float y como double
+
+WriteLine(2.3f); //FLOAT
+WriteLine(2.3d); //DOUBLE
+
+//Escribir el 2.3 como decimal
+WriteLine(2.3m); //DECIMAL
+
