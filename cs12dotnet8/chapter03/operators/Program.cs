@@ -1,4 +1,6 @@
 ﻿#region Exploring unary operators
+using StackExchange.Profiling;
+
 int a = 3;
 int b = a++;
 Console.WriteLine($"a is: {a}, b is: {b}");
@@ -22,11 +24,33 @@ null
 
 string mensaje;
 
+#region LOG EXAMPLE
+//Path.Combine combina dos rutas en una sola
+string logpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "log.txt");
+//TextWriterTraceListener es un listener que escribe en un archivo de texto
+TextWriterTraceListener textWriterTraceListener = new(File.CreateText(logpath));
+//Agrego el listener a la lista de listeners
+Trace.Listeners.Add(textWriterTraceListener);
+//Flush quiere decir que se vacia el buffer de salida despues de cada operacion de escritura
+Trace.AutoFlush = true; //Flushes the output buffer after each write operation
+
+#if DEBUG
+Trace.WriteLine($"This is a debug message {DateTime.Now}");
+#endif
+
+Debug.WriteLine("Im a debug message");
+Trace.WriteLine($"Im a trace message {DateTime.Now}");
+#endregion
+
 
 #region switch animals
 
 foreach (Animal? animal in animals)
 {
+    /* The `switch (animal)` statement is used to evaluate the value of the `animal` variable and then
+    execute the corresponding case based on the value of `animal`. Each `case` statement checks if
+    the `animal` matches a specific pattern or condition, and if it does, the corresponding block of
+    code is executed. If none of the cases match, the `default` case is executed. */
     switch (animal)
     {
         case Cat fourLeggedCat when fourLeggedCat.Legs == 4:
@@ -82,3 +106,70 @@ foreach (Animal? animal in animals)
 }
 
 #endregion
+
+//Quiero parar el while cuando se presiona una tecla
+do
+{
+    WriteLine("HotRealoading");
+    await Task.Delay(2000);
+} while (!Console.KeyAvailable);
+
+
+ var profiler = MiniProfiler.StartNew("My Profiler Name");
+using (profiler.Step("Main Work"))
+{
+
+    string settingsFile = "appsettings.json";
+    string settingsPath = Path.Combine(Directory.GetCurrentDirectory(), settingsFile);
+    WriteLine($"Processing:{settingsPath}");
+    WriteLine($"--{settingsFile} contents --");
+    WriteLine(File.ReadAllText(settingsPath));
+    WriteLine("----");
+
+    ConfigurationBuilder builder = new();
+    builder.SetBasePath(Directory.GetCurrentDirectory());
+
+    builder.AddJsonFile(settingsFile, optional: false, reloadOnChange: true);
+    IConfigurationRoot configuration = builder.Build();
+
+    TraceSwitch ts = new TraceSwitch(displayName: "PacktSwitch", description: "This switch is set via JSON config");
+
+    configuration.GetSection("PacktSwitch").Bind(ts);
+
+    WriteLine($"TraceSwitch Value: {ts.Value}");
+    WriteLine($"TraceSwitch Level: {ts.Level}");
+
+    Trace.WriteLineIf(ts.TraceError, "TraceError");
+    Trace.WriteLineIf(ts.TraceWarning, "TraceWarning");
+    Trace.WriteLineIf(ts.TraceVerbose, "TraceVerbose");
+    Trace.WriteLineIf(ts.TraceInfo, "TraceInfo");
+
+    int valor = 1;
+    LogSourceDetails(valor == 0);
+
+
+
+}
+
+Console.WriteLine(profiler.RenderPlainText());
+Debug.Close();
+Trace.Close();
+
+[Benchmark]
+static void LogSourceDetails(bool condition,
+    [CallerFilePath] string? file = null,
+    [CallerLineNumber] int line = 0,
+    [CallerMemberName] string? member = null,
+    [CallerArgumentExpressionAttribute(nameof(condition))] string expression = "")
+{
+    Trace.WriteLine($"File: {file}, Line: {line}, Member: {member}, Expression: {expression}");
+    if (condition)
+    {
+        WriteLine("Condition is true");
+    }
+    else
+    {
+        WriteLine("Condition is false");
+    }
+}
+

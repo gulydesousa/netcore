@@ -1,5 +1,5 @@
-﻿public class Cat: Animal
+﻿public class Cat : Animal
 {
-    public bool  IsDomestic { get; set; }
+    public bool IsDomestic { get; set; }
 }
 
