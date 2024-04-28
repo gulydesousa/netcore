@@ -1,5 +1,5 @@
 ﻿
-if(args.Length <3)
+if (args.Length < 3)
 {
     WriteLine("You must specify two colors and cursor size, e.g.");
     WriteLine("dotnet run red yellow 50");

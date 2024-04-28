@@ -19,7 +19,7 @@ class Program
         decimal a = 0.1M;
         decimal b = 0.2M;
 
-        Console.WriteLine($"decimal a: {a}, decimal b: {b}, a + b: {a + b}, equal: {(a + b == 0.3M ? "yes": "no")}");
+        Console.WriteLine($"decimal a: {a}, decimal b: {b}, a + b: {a + b}, equal: {(a + b == 0.3M ? "yes" : "no")}");
 
         double a0 = 0.1;
         double b0 = 0.2;
