@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34928.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Northwind.EntityModels.SQLServer", "Northwind.EntityModels.SQLServer\Northwind.EntityModels.SQLServer.csproj", "{B734A8B3-5A61-43DD-B29D-654732369AB9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1475BE6E-548A-4EDA-9A37-B530AEFEBBCD}"
+	ProjectSection(SolutionItems) = preProject
+		Northwind4SQLServer.sql = Northwind4SQLServer.sql
+		readme.md = readme.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Northwind.DataContext.SQLServer", "Northwind.DataContext.SQLServer\Northwind.DataContext.SQLServer.csproj", "{D9DB4F58-2BA1-4861-A610-3B58E8A879EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind.UnitTests", "Northwind.UnitTests\Northwind.UnitTests.csproj", "{0F6115B4-51A5-4291-AF00-E3B1F5C66059}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B734A8B3-5A61-43DD-B29D-654732369AB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B734A8B3-5A61-43DD-B29D-654732369AB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B734A8B3-5A61-43DD-B29D-654732369AB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B734A8B3-5A61-43DD-B29D-654732369AB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9DB4F58-2BA1-4861-A610-3B58E8A879EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9DB4F58-2BA1-4861-A610-3B58E8A879EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9DB4F58-2BA1-4861-A610-3B58E8A879EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9DB4F58-2BA1-4861-A610-3B58E8A879EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F6115B4-51A5-4291-AF00-E3B1F5C66059}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F6115B4-51A5-4291-AF00-E3B1F5C66059}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F6115B4-51A5-4291-AF00-E3B1F5C66059}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F6115B4-51A5-4291-AF00-E3B1F5C66059}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3BF440EE-C270-44F8-BDD8-23198FABD906}
+	EndGlobalSection
+EndGlobal
